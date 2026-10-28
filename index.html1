@@ -1,0 +1,541 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#180912">
+<title>For My Girl ♡</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap');
+
+:root{
+ --bg:#180912;--wine:#4a142b;
+ --rose:#ff7ca8;--gold:#f3d49a;
+ --cream:#fff3f0;--muted:#d6b9c4;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;background:var(--bg);color:var(--cream);
+ font-family:'Cairo',sans-serif;overflow-x:hidden
+}
+button,input{font:inherit}
+button{cursor:pointer;transition:.25s}
+button:active{transform:scale(.96)}
+
+#gate{
+ position:fixed;inset:0;z-index:20;
+ display:grid;place-items:center;overflow:hidden;
+ background:radial-gradient(ellipse at 50% 38%,#69203e,#2c0d1d 48%,#10060d);
+ transition:opacity .9s,transform .9s
+}
+#gate.exit{opacity:0;transform:scale(1.08);pointer-events:none}
+.gate-stars{
+ position:absolute;inset:0;opacity:.65;
+ background-image:radial-gradient(#ffe7ef 1px,transparent 1.5px),radial-gradient(#f4c7d8 1px,transparent 1.5px);
+ background-size:57px 57px,91px 91px;
+ background-position:0 0,25px 40px
+}
+.gate-glow{
+ position:absolute;width:280px;height:280px;border-radius:50%;
+ background:#ff5f9722;filter:blur(35px);
+ animation:pulse 4s infinite
+}
+.login-card{
+ position:relative;width:min(88%,370px);padding:35px 25px 30px;
+ text-align:center;border:1px solid #f3d49a66;border-radius:30px;
+ background:linear-gradient(150deg,#ffffff12,#ffffff04);
+ box-shadow:0 0 65px #ff66951a,inset 0 0 30px #ffffff06;
+ backdrop-filter:blur(14px);animation:rise 1s both
+}
+.lock-heart{
+ width:82px;height:82px;margin:0 auto 17px;
+ display:grid;place-items:center;border-radius:50%;
+ border:1px solid #f3d49a88;
+ background:linear-gradient(135deg,#ff8bad33,#f3d49a0c);
+ box-shadow:0 0 35px #ff7ca833;font-size:38px;
+ animation:heartbeat 2.2s infinite
+}
+.eyebrow{font-size:11px;letter-spacing:4px;color:var(--gold);direction:ltr}
+.login-card h1{
+ font-family:'Playfair Display',serif;
+ font-size:clamp(34px,10vw,43px);font-weight:600;
+ direction:ltr;margin:8px 0;color:#fff2f4
+}
+.login-card .sub{color:#e8cbd5;font-size:13px;margin:0 0 23px}
+#password{
+ width:100%;border:1px solid #f3d49a55;border-radius:16px;
+ padding:14px;background:#15081088;color:white;outline:none;
+ text-align:center;letter-spacing:2px
+}
+#password:focus{border-color:var(--gold);box-shadow:0 0 0 4px #f3d49a14}
+#unlock{
+ width:100%;margin-top:12px;padding:13px;border:0;border-radius:16px;
+ color:#351020;font-weight:800;
+ background:linear-gradient(100deg,#f8dca9,#ff9db8);
+ box-shadow:0 8px 25px #ff7ca82b
+}
+#error{min-height:22px;font-size:12px;color:#ffb6ca;margin:10px 0 0}
+.tiny-heart{position:absolute;animation:drift 7s ease-in-out infinite;opacity:.8}
+
+#site{opacity:0;visibility:hidden;transition:opacity 1s}
+#site.show{opacity:1;visibility:visible}
+.hero{
+ min-height:90vh;position:relative;display:flex;align-items:center;
+ justify-content:center;text-align:center;padding:70px 18px 50px;
+ overflow:hidden;
+ background:radial-gradient(ellipse at 50% 30%,#702342,#301020 50%,#180912)
+}
+.hero:before,.hero:after{
+ content:"";position:absolute;width:260px;height:260px;
+ border:1px solid #f3d49a22;border-radius:50%;
+ animation:orbit 22s linear infinite
+}
+.hero:after{width:360px;height:360px;animation-direction:reverse}
+.hero-inner{position:relative;z-index:1;max-width:650px}
+.kicker{color:var(--gold);letter-spacing:3px;font-size:11px;direction:ltr}
+.hero h2{
+ font-family:'Playfair Display',serif;direction:ltr;
+ font-size:clamp(43px,12vw,76px);line-height:1.05;
+ margin:16px 0;color:#fff1f4;text-shadow:0 0 35px #ff7ca833
+}
+.hero h2 span{color:var(--rose)}
+.hero p{max-width:480px;margin:15px auto;color:#e7cad4;line-height:2}
+.primary{
+ border:1px solid #f3d49a88;border-radius:99px;padding:12px 23px;
+ background:linear-gradient(110deg,#f3d49a,#ff9db8);
+ color:#351020;font-weight:800;margin:10px 5px;
+ box-shadow:0 8px 25px #ff7ca822
+}
+.ghost{
+ border:1px solid #f3d49a55;border-radius:99px;padding:11px 20px;
+ background:#ffffff08;color:var(--cream);margin:10px 5px
+}
+.floating-heart{
+ position:fixed;bottom:-40px;z-index:30;pointer-events:none;
+ animation:floatUp linear forwards
+}
+nav{
+ position:sticky;top:0;z-index:10;display:flex;gap:7px;
+ justify-content:center;flex-wrap:wrap;padding:10px;
+ background:#180912e8;border-bottom:1px solid #f3d49a20;
+ backdrop-filter:blur(15px)
+}
+nav a{font-size:12px;color:#f5dce4;text-decoration:none;padding:7px 11px;border-radius:20px}
+nav a:hover{background:#ffffff12;color:var(--gold)}
+section.content-section{padding:55px 16px;max-width:1000px;margin:auto}
+.section-head{text-align:center;margin-bottom:26px}
+.section-head .mini{color:var(--gold);font-size:11px;letter-spacing:3px;direction:ltr}
+.section-head h3{font-size:27px;margin:5px 0;color:var(--cream)}
+.section-head p{color:var(--muted);font-size:13px;line-height:1.8}
+.panel{
+ border:1px solid #f3d49a2b;
+ background:linear-gradient(145deg,#ffffff0b,#ffffff03);
+ border-radius:24px;padding:22px;box-shadow:0 14px 40px #0002
+}
+.photo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.photo{position:relative;min-height:210px;border-radius:20px;overflow:hidden;background:#3a1425}
+.photo img{width:100%;height:100%;min-height:210px;object-fit:cover;display:block;transition:transform .6s}
+.photo:hover img{transform:scale(1.07)}
+.photo span{
+ position:absolute;bottom:0;right:0;left:0;padding:25px 12px 12px;
+ background:linear-gradient(transparent,#12060cdd);font-size:13px
+}
+@media(min-width:650px){.photo-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.photo,.photo img{min-height:260px}}
+.action-row{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
+.love-note{
+ font-size:19px;line-height:2;text-align:center;color:#ffecf2;
+ min-height:90px;display:grid;place-items:center
+}
+.reason-number{font-family:'Playfair Display',serif;color:var(--gold);font-size:42px;direction:ltr}
+.big-heart{border:0;background:transparent;font-size:70px;filter:drop-shadow(0 0 18px #ff4f8a55)}
+.big-heart:active{transform:scale(1.25)}
+.counter{font-family:'Playfair Display',serif;font-size:44px;color:var(--gold);direction:ltr}
+.answer{color:var(--gold);min-height:45px;line-height:1.9}
+.envelope{
+ width:150px;height:100px;position:relative;margin:20px auto;
+ background:#8b2e50;border-radius:8px;display:grid;place-items:center;
+ box-shadow:0 8px 25px #0003;cursor:pointer
+}
+.envelope:before{
+ content:"";position:absolute;top:0;left:0;right:0;
+ border-left:75px solid transparent;border-right:75px solid transparent;
+ border-top:55px solid #c65375;transform-origin:top;transition:transform .5s;z-index:1
+}
+.envelope.open:before{transform:rotateX(180deg)}
+.envelope span{z-index:2;font-size:30px}
+footer{text-align:center;padding:35px 15px;color:#caa9b7;font-size:12px}
+.toast{
+ position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);
+ opacity:0;z-index:40;padding:12px 18px;background:#f3d49a;
+ color:#351020;border-radius:30px;font-size:13px;transition:.3s;
+ pointer-events:none;white-space:nowrap;max-width:95%;overflow:hidden
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@keyframes floatUp{to{transform:translateY(-110vh) rotate(35deg);opacity:0}}
+@keyframes pulse{50%{transform:scale(1.2);opacity:.6}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}8%{transform:scale(1.08)}16%{transform:scale(1)}24%{transform:scale(1.1)}32%{transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes drift{50%{transform:translate(15px,-15px) rotate(15deg)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div id="gate">
+ <div class="gate-stars"></div>
+ <div class="gate-glow"></div>
+ <span class="tiny-heart" style="top:15%;left:16%;font-size:24px">♡</span>
+ <span class="tiny-heart" style="top:24%;right:14%;font-size:19px">✦</span>
+ <span class="tiny-heart" style="bottom:17%;left:20%;font-size:21px">♡</span>
+
+ <div class="login-card">
+  <div class="lock-heart">♡</div>
+  <div class="eyebrow">A LITTLE WORLD FOR YOU</div>
+  <h1>For My Girl</h1>
+  <p class="sub">just you & me · Hamo ♡ Esraa</p>
+  <form id="loginForm">
+   <input id="password" type="password" placeholder="كلمة السر ♡" autocomplete="off" aria-label="كلمة السر">
+   <button id="unlock" type="submit">افتحي عالمنا ✧</button>
+  </form>
+  <div id="error"></div>
+ </div>
+</div>
+
+<main id="site">
+ <header class="hero" id="home">
+  <div class="hero-inner">
+   <div class="kicker">A STORY WRITTEN IN LITTLE MOMENTS</div>
+   <h2>Hamo <span>&</span><br>Esraa</h2>
+   <p>وسط كل الحكايات، في حكاية ليها مكان مختلف…<br>ودي حكايتنا إحنا. ♡</p>
+   <button class="primary" onclick="scrollToSection('gallery')">ابدئي الحكاية ↓</button>
+   <button class="ghost" onclick="burstHearts()">اضغطي هنا 💗</button>
+  </div>
+ </header>
+
+ <nav>
+  <a href="#gallery">لحظاتنا</a>
+  <a href="#note">رسالة ليكي</a>
+  <a href="#reasons">ليه مميزة؟</a>
+  <a href="#game">لعبة صغيرة</a>
+  <a href="#wish">مفاجأة</a>
+ </nav>
+
+ <section class="content-section" id="gallery">
+  <div class="section-head">
+   <div class="mini">OUR LITTLE UNIVERSE</div>
+   <h3>مشاهد من حكاية حب ♡</h3>
+   <p>صور رومانسية لثنائي بيحب بعض — اختاري صورة وغيّري ترتيب اللحظات.</p>
+  </div>
+
+  <div class="photo-grid" id="photos">
+   <div class="photo">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=800&q=85" alt="ثنائي في لحظة رومانسية">
+    <span>لحظة هادية، وقلب مطمّن ♡</span>
+   </div>
+   <div class="photo">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=85" alt="زوجان يمسكان أيدي بعضهما">
+    <span>إيد في إيد، وخطوة بخطوة</span>
+   </div>
+   <div class="photo">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=85" alt="لحظة دافئة مع الأحباب">
+    <span>الدفا في وجود اللي بنحبهم</span>
+   </div>
+   <div class="photo">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=800&q=85" alt="قلوب وزهور رومانسية">
+    <span>تفاصيل صغيرة، ومعنى كبير</span>
+   </div>
+   <div class="photo">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1507504031003-b417219a0dde?auto=format&fit=crop&w=800&q=85" alt="لحظة رومانسية في الطبيعة">
+    <span>مكان حلو، مع الشخص الصح</span>
+   </div>
+   <div class="photo">
+    <img loading="lazy" src="https://images.unsplash.com/photo-1474552226712-ac0f0961a954?auto=format&fit=crop&w=800&q=85" alt="زوجان يقضيان وقتا معا">
+    <span>أحلى الذكريات لسه جاية ✨</span>
+   </div>
+  </div>
+
+  <div class="action-row" style="margin-top:17px">
+   <button class="primary" onclick="shufflePhotos()">غيّري ترتيب الصور ↻</button>
+   <button class="ghost" onclick="toast('الجمال دايمًا في التفاصيل ♡')">كلمة للصورة ✧</button>
+  </div>
+ </section>
+
+ <section class="content-section" id="note">
+  <div class="section-head">
+   <div class="mini">A NOTE FROM THE HEART</div>
+   <h3>رسالة صغيرة ليكي 💌</h3>
+   <p>كل ضغطة ليها كلام مختلف.</p>
+  </div>
+  <div class="panel">
+   <div class="love-note" id="loveNote">في ناس وجودها بيخلّي أبسط يوم له معنى أجمل… وإنتِ واحدة من الناس دي. ♡</div>
+   <div class="action-row">
+    <button class="primary" onclick="newNote()">رسالة تانية ✨</button>
+    <button class="ghost" onclick="copyNote()">انسخي الرسالة</button>
+   </div>
+  </div>
+ </section>
+
+ <section class="content-section" id="reasons">
+  <div class="section-head">
+   <div class="mini">1000 LITTLE REASONS</div>
+   <h3>ليه إنتِ مميزة؟ 🌷</h3>
+   <p>سبب واحد في كل مرة… والقائمة لسه طويلة.</p>
+  </div>
+  <div class="panel" style="text-align:center">
+   <div class="reason-number" id="reasonNumber">01</div>
+   <div class="love-note" id="reasonText">عشان ضحكتك بتخلّي اللحظة أحلى.</div>
+   <button class="primary" onclick="nextReason()">السبب اللي بعده ♡</button>
+  </div>
+ </section>
+
+ <section class="content-section" id="game">
+  <div class="section-head">
+   <div class="mini">A TINY LOVE GAME</div>
+   <h3>اختاري قلبك 💗</h3>
+   <p>اختاري قلب وشوفي الرسالة اللي مخبّية جواه.</p>
+  </div>
+  <div class="panel" style="text-align:center">
+   <button class="big-heart" onclick="chooseHeart(0)">💗</button>
+   <button class="big-heart" onclick="chooseHeart(1)">💖</button>
+   <button class="big-heart" onclick="chooseHeart(2)">💘</button>
+   <div class="answer" id="heartAnswer">اختاري واحد من التلاتة ♡</div>
+  </div>
+ </section>
+
+ <section class="content-section" id="wish">
+  <div class="section-head">
+   <div class="mini">ONE SECRET SURPRISE</div>
+   <h3>في حاجة مستنياكي 🎁</h3>
+   <p>افتحي الظرف وشوفي الرسالة.</p>
+  </div>
+  <div class="panel" style="text-align:center">
+   <div class="envelope" id="envelope" onclick="openEnvelope()"><span>💌</span></div>
+   <div class="love-note" id="surpriseText">رسالة صغيرة مستخبية هنا…</div>
+   <button class="primary" onclick="openEnvelope()">افتحي الظرف ♡</button>
+   <button class="ghost" onclick="burstHearts()">احتفال صغير ✨</button>
+  </div>
+ </section>
+
+ <section class="content-section">
+  <div class="panel" style="text-align:center">
+   <div class="section-head">
+    <div class="mini">THE HEART BUTTON</div>
+    <h3>اضغطي على القلب ❤️</h3>
+    <p>كل ضغطة تزود قلوب العالم الصغير ده.</p>
+   </div>
+   <button class="big-heart" onclick="tapHeart()">❤️</button>
+   <div class="counter" id="heartCount">0</div>
+   <div style="color:var(--muted);font-size:12px">قلب اتبعت بحب</div>
+  </div>
+ </section>
+
+ <footer>
+  Made with ♡ by Hamo, for Esraa<br>
+  <span style="color:#8e6676">A little corner of the universe, just for you.</span>
+ </footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PASSWORD='بحبك';
+
+const gate=document.getElementById('gate');
+const site=document.getElementById('site');
+
+document.getElementById('loginForm').addEventListener('submit',function(e){
+ e.preventDefault();
+
+ if(document.getElementById('password').value===PASSWORD){
+  gate.classList.add('exit');
+
+  setTimeout(()=>{
+   gate.style.display='none';
+   site.classList.add('show');
+   window.scrollTo(0,0);
+   burstHearts();
+  },650);
+
+ }else{
+  document.getElementById('error').textContent='مش دي ♡ جرّبي تاني';
+
+  document.getElementById('password').animate([
+   {transform:'translateX(0)'},
+   {transform:'translateX(-6px)'},
+   {transform:'translateX(6px)'},
+   {transform:'translateX(0)'}
+  ],{duration:250});
+ }
+});
+
+const notes=[
+'في ناس وجودها بيخلّي أبسط يوم له معنى أجمل… وإنتِ واحدة من الناس دي. ♡',
+'أتمنى تفضلي تلاقي سبب تضحكي عشانه كل يوم، حتى لو كان صغير. 🌷',
+'مش لازم كل اللحظات تكون مثالية… المهم يكون فيها إحساس حلو وصدق. 💗',
+'لو اليوم كان طويل، أتمنى الرسالة دي تكون استراحة صغيرة لقلبك. 💌',
+'في حاجات حلوة كتير لسه مستنياكي، وخطوات جميلة لسه جاية. ✨',
+'أجمل حاجة في الحكايات إنها بتتكتب لحظة بلحظة… ودي لسه مكملة. ♡',
+'خليكي دايمًا فاكرة إنك تستاهلي اللطف والاهتمام والفرحة. 🌙'
+];
+
+let lastNote=-1;
+
+function newNote(){
+ let n;
+ do{n=Math.floor(Math.random()*notes.length)}
+ while(n===lastNote&&notes.length>1);
+
+ lastNote=n;
+ document.getElementById('loveNote').textContent=notes[n];
+}
+
+function copyNote(){
+ const t=document.getElementById('loveNote').textContent;
+
+ if(navigator.clipboard&&navigator.clipboard.writeText){
+  navigator.clipboard.writeText(t)
+   .then(()=>toast('الرسالة اتنسخت ♡'))
+   .catch(()=>toast('حددي الرسالة وانسخيها ♡'));
+ }else{
+  toast('حددي الرسالة وانسخيها ♡');
+ }
+}
+
+const reasons=[
+'عشان ضحكتك بتخلّي اللحظة أحلى.',
+'عشان طريقتك ليها طابع خاص.',
+'عشان التفاصيل الصغيرة منك بتفرق.',
+'عشان وجودك بيضيف بهجة.',
+'عشان تستاهلي كل خير وفرحة.',
+'عشان لكل شخص فينا حكاية مختلفة.',
+'عشان روحك فيها حاجات جميلة كتير.',
+'عشان إنتِ إنتِ… ودي لوحدها حكاية.'
+];
+
+let reasonIndex=0;
+
+function nextReason(){
+ reasonIndex=(reasonIndex+1)%reasons.length;
+
+ document.getElementById('reasonNumber').textContent=
+  String(reasonIndex+1).padStart(2,'0');
+
+ document.getElementById('reasonText').textContent=
+  reasons[reasonIndex];
+}
+
+const heartMessages=[
+'رسالة سرية: أتمنى يومك يبقى جميل زي قلبك 💗',
+'مفاجأة صغيرة: ابتسمي، يمكن أحلى لحظة لسه جاية ✨',
+'تذكرة لطيفة: إنتِ تستاهلي معاملة حلوة دايمًا 🌷'
+];
+
+function chooseHeart(i){
+ document.getElementById('heartAnswer').textContent=heartMessages[i];
+ heartBurstAt(window.innerWidth/2,window.innerHeight*.65);
+}
+
+let envelopeOpen=false;
+
+function openEnvelope(){
+ const env=document.getElementById('envelope');
+
+ if(!envelopeOpen){
+  envelopeOpen=true;
+  env.classList.add('open');
+
+  document.getElementById('surpriseText').textContent=
+   'يا إسراء ♡ أتمنى حياتك تكون مليانة طمأنينة وفرح، وكل يوم يجيبلك سبب جديد تبتسمي عشانه. — حمو 💌';
+
+  burstHearts();
+ }else{
+  env.classList.remove('open');
+  envelopeOpen=false;
+
+  document.getElementById('surpriseText').textContent=
+   'الرسالة رجعت للظرف… افتحيها تاني وقت ما تحبي ♡';
+ }
+}
+
+let count=0;
+
+function tapHeart(){
+ count++;
+ document.getElementById('heartCount').textContent=count;
+
+ heartBurstAt(Math.random()*window.innerWidth,window.innerHeight*.7);
+
+ if(count%10===0)toast('وصلنا '+count+' قلوب! 💖');
+}
+
+function heartBurstAt(x,y){
+ for(let i=0;i<7;i++){
+  const el=document.createElement('span');
+  el.className='floating-heart';
+  el.textContent=['💗','♡','✨','💖'][Math.floor(Math.random()*4)];
+  el.style.left=(x+(Math.random()-.5)*100)+'px';
+  el.style.top=y+'px';
+  el.style.bottom='auto';
+  el.style.fontSize=(16+Math.random()*18)+'px';
+  el.style.animationDuration=(1.8+Math.random()*1.5)+'s';
+
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3500);
+ }
+}
+
+function burstHearts(){
+ for(let i=0;i<28;i++){
+  setTimeout(()=>{
+   const el=document.createElement('span');
+   el.className='floating-heart';
+   el.textContent=['💗','💖','♡','✨','💕'][Math.floor(Math.random()*5)];
+   el.style.left=Math.random()*100+'vw';
+   el.style.fontSize=(15+Math.random()*24)+'px';
+   el.style.animationDuration=(3+Math.random()*4)+'s';
+
+   document.body.appendChild(el);
+   setTimeout(()=>el.remove(),7500);
+  },i*45);
+ }
+}
+
+function shufflePhotos(){
+ const grid=document.getElementById('photos');
+ const cards=Array.from(grid.children);
+
+ for(let i=cards.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [cards[i],cards[j]]=[cards[j],cards[i]];
+ }
+
+ cards.forEach(card=>grid.appendChild(card));
+ toast('اللحظات اتبدّلت ✨');
+}
+
+let toastTimer;
+
+function toast(text){
+ const el=document.getElementById('toast');
+ el.textContent=text;
+ el.classList.add('on');
+
+ clearTimeout(toastTimer);
+
+ toastTimer=setTimeout(()=>{
+  el.classList.remove('on');
+ },2200);
+}
+
+function scrollToSection(id){
+ document.getElementById(id).scrollIntoView({
+  behavior:'smooth'
+ });
+}
+</script>
+</body>
+</html>
