@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>غريم AI</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌑</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--night:#12121c;--panel:#1c1c2c;--line:#2e2e45;--moon:#e4e1f0;--dim:#9390ab;--lantern:#e9c46a;--ash:#6c63c9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:var(--night);color:var(--moon);font-family:'Tajawal',system-ui,sans-serif;color-scheme:dark}
+body{display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+header{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}
+header h1{font-family:'Reem Kufi',serif;font-size:26px;font-weight:700;letter-spacing:.5px}
+header small{display:block;color:var(--dim);font-size:13px}
+select{background:var(--panel);color:var(--moon);border:1px solid var(--line);border-radius:10px;padding:7px 8px;font:inherit;font-size:13px}
+.sel{margin-inline-start:auto;display:flex;flex-direction:column;gap:6px}
+main{flex:1;overflow-y:auto;padding:16px 18px}
+.view{display:none}.view.on{display:block}
+.bubble{background:var(--panel);border:1px solid var(--line);border-radius:18px 18px 18px 4px;padding:12px 14px;margin-bottom:12px;line-height:1.7;max-width:92%;white-space:pre-wrap}
+.bubble.me{background:#25233f;border-color:#3a3764;border-radius:18px 18px 4px 18px;margin-inline-start:auto}
+.item{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}
+.tag{font-size:12px;border:1px solid var(--lantern);color:var(--lantern);border-radius:999px;padding:1px 9px;white-space:nowrap}
+.tag.idea{border-color:var(--ash);color:#b8b2f5}.tag.mood{border-color:#d98aa3;color:#e9a9bf}.tag.note{border-color:var(--dim);color:var(--dim)}
+.item p{flex:1;line-height:1.6}.item.done p{text-decoration:line-through;color:var(--dim)}
+.item time{color:var(--dim);font-size:12px;display:block}
+button{font:inherit;cursor:pointer;color:var(--moon);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 14px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--lantern);outline-offset:2px}
+.cta{background:var(--lantern);color:#1a1630;border:0;font-weight:700;width:100%;padding:13px;margin-top:10px}
+h2{font-family:'Reem Kufi',serif;font-size:20px;margin-bottom:10px}
+.empty{color:var(--dim);line-height:1.8;padding:24px 0;text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.stats div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stats b{display:block;font-size:24px;color:var(--lantern)}
+.bar{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
+.bar input{flex:1;min-width:0;background:var(--panel);color:var(--moon);border:1px solid var(--line);border-radius:14px;padding:11px 14px;font:inherit}
+#mic{width:48px;height:48px;border-radius:50%;padding:0;background:var(--lantern);border:0;display:grid;place-items:center}
+#mic.rec{animation:p 1s infinite;background:#d98aa3}
+@keyframes p{50%{box-shadow:0 0 0 10px rgba(217,138,163,.25)}}
+nav{display:flex;border-top:1px solid var(--line)}
+nav button{flex:1;border:0;border-radius:0;background:none;color:var(--dim);padding:12px 4px;font-size:14px}
+nav button.on{color:var(--lantern);box-shadow:inset 0 2px 0 var(--lantern)}
+@media(prefers-reduced-motion:reduce){#mic.rec{animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <svg width="44" height="44" viewBox="0 0 64 64" aria-label="شعار غريم">
+    <circle cx="32" cy="32" r="30" fill="#1c1c2c" stroke="#e9c46a" stroke-width="2"/>
+    <path d="M32 10c-10 0-17 8-17 18v14c0 3 2 5 5 5h4l8-6 8 6h4c3 0 5-2 5-5V28c0-10-7-18-17-18z" fill="#12121c" stroke="#e4e1f0" stroke-width="2"/>
+    <ellipse cx="32" cy="30" rx="9" ry="10" fill="#0a0a12"/>
+    <circle cx="28" cy="30" r="2" fill="#e9c46a"/><circle cx="36" cy="30" r="2" fill="#e9c46a"/>
+    <path d="M50 8L40 44" stroke="#e9c46a" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M50 8c-9 0-14 5-15 11 5-3 10-3 15-3z" fill="#e9c46a"/>
+  </svg>
+  <div><h1>غريم</h1><small id="sub">ما ينسى اللي يهمك</small></div>
+  <div class="sel">
+    <select id="dialect" aria-label="اللهجة">
+      <option value="ar-EG">مصري</option><option value="ar-SA">خليجي</option>
+      <option value="ar-JO">شامي</option><option value="ar-MA">مغاربي</option><option value="ar">فصحى</option>
+    </select>
+    <select id="persona" aria-label="الشخصية">
+      <option value="elder">الجد الحكيم</option><option value="friend">الصديق المزعج</option>
+      <option value="coach">المدرب الصارم</option><option value="night">الراوي الليلي</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <section class="view on" id="v-talk"><div id="chat"></div></section>
+
+  <section class="view" id="v-mem">
+    <h2>ذاكرتي</h2>
+    <div id="list"></div>
+  </section>
+
+  <section class="view" id="v-mirror">
+    <h2>مراية اليوم</h2>
+    <div class="stats"><div><b id="s1">0</b>مهام</div><div><b id="s2">0</b>أفكار</div><div><b id="s3">0</b>مشاعر</div></div>
+    <div class="bubble" id="mtext">اضغط الزر وغريم يلخص يومك.</div>
+    <button class="cta" id="mbtn">لخّص يومي واقرأه بصوت</button>
+  </section>
+
+  <section class="view" id="v-reap">
+    <h2>حصاد الأسبوع</h2>
+    <p class="empty" id="rtext" style="padding-top:4px;text-align:start">غريم يقطع المهام المنجزة والملاحظات القديمة ويبقي لك الأهم.</p>
+    <button class="cta" id="rbtn">احصد الآن</button>
+  </section>
+</main>
+
+<div class="bar" id="bar">
+  <button id="mic" aria-label="تكلم مع غريم">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a1630" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+  </button>
+  <input id="txt" placeholder="قل لغريم… مثال: ذكرني أكلم أبوي الخميس" aria-label="رسالتك">
+  <button id="send">إرسال</button>
+</div>
+
+<nav>
+  <button class="on" data-v="talk">تكلم</button>
+  <button data-v="mem">ذاكرتي</button>
+  <button data-v="mirror">المراية</button>
+  <button data-v="reap">الحصاد</button>
+</nav>
+
+<script>
+const $=s=>document.querySelector(s);
+let items=[];
+try{items=JSON.parse(localStorage.getItem('grim_items')||'[]')}catch(e){items=[]}
+const save=()=>{try{localStorage.setItem('grim_items',JSON.stringify(items))}catch(e){}};
+
+const P={
+  elder:{ok:'حاضر يا ولدي، كتبتها في ذاكرتي.',idea:'فكرة طيبة، حفظتها لك. الأفكار تحتاج صبر.',mood:'أسمعك. المشاعر تعدي، وأنا بسأل عنك بعدين.',hi:'السلام عليكم، أنا غريم. قل وأنا أحفظ.'},
+  friend:{ok:'تمام تمام، سجلتها! بس لا تنساها زي كل مرة 😄',idea:'يا سلام! فكرة حلوة، بس نفذها بقى.',mood:'طيب خد نفس. أنا هنا ومش هسيبك.',hi:'أخيرًا افتكرتني! قول يلا.'},
+  coach:{ok:'تم التسجيل. الآن نفّذ، لا تؤجل.',idea:'فكرة مسجلة. بدون تنفيذ لا قيمة لها.',mood:'اعترف بالشعور ثم تحرك. خطوة واحدة صغيرة الآن.',hi:'جاهز. ما هي مهمتك الأولى اليوم؟'},
+  night:{ok:'همسةٌ محفوظة في الليل. نم مطمئنًا.',idea:'الأفكار تزهر في الظلام. حفظتها لك.',mood:'الليل يحتضن كل ثقيل. تنفس ببطء.',hi:'مساء الهدوء. احكِ لي ما في قلبك.'}
+};
+const persona=()=>P[$('#persona').value];
+
+function classify(t){
+  if(/ذكرني|ذكّرني|فكرني|لازم|لازم أ|مطلوب|ابغى|أبغى|عايز|عاوز|موعد/.test(t))return 'task';
+  if(/فكرة|فكره|مشروع|اقتراح/.test(t))return 'idea';
+  if(/قلقان|قلقانة|زعلان|زعلانة|خايف|مضغوط|تعبان|مبسوط|فرحان|سعيد|حزين|متوتر/.test(t))return 'mood';
+  return 'note';
+}
+const label={task:'مهمة',idea:'فكرة',mood:'شعور',note:'ملاحظة'};
+const cls={task:'',idea:'idea',mood:'mood',note:'note'};
+
+function say(t){
+  try{
+    if(!('speechSynthesis' in window))return;
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang=$('#dialect').value==='ar'?'ar-SA':$('#dialect').value;
+    u.rate=$('#persona').value==='night'?.85:1;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function bubble(t,me){
+  const d=document.createElement('div');d.className='bubble'+(me?' me':'');d.textContent=t;
+  $('#chat').appendChild(d);$('main').scrollTop=1e9;
+}
+const STORY=/احكي|احكى|احكِ|حكاية|حدوتة|قصة|قصه|احكيلي/;
+function sayLong(text){
+  try{
+    if(!('speechSynthesis' in window))return;
+    speechSynthesis.cancel();
+    const parts=text.match(/[^.!؟?\n]+[.!؟?]?/g)||[text];
+    parts.forEach(p=>{
+      if(!p.trim())return;
+      const u=new SpeechSynthesisUtterance(p.trim());
+      u.lang=$('#dialect').value==='ar'?'ar-SA':$('#dialect').value;
+      u.rate=$('#persona').value==='night'?.85:1;
+      speechSynthesis.speak(u);
+    });
+  }catch(e){}
+}
+async function story(t){
+  const stop=['احكيلي','احكي','احكى','احكِ','لي','حكاية','حدوتة','قصة','قصه','عن','بالصوت','ممكن','لو','سمحت'];
+  const topic=t.split(/\s+/).filter(w=>!stop.includes(w)).join(' ').trim()||t;
+  bubble('ثواني أدوّر على القصة…');
+  try{
+    const api='https://ar.wikipedia.org/w/api.php?format=json&origin=*&action=query';
+    const s=await (await fetch(`${api}&list=search&srlimit=1&srsearch=${encodeURIComponent(topic)}`)).json();
+    const title=s.query.search[0]&&s.query.search[0].title;
+    if(!title){const m='ما لقيت قصة بهذا الاسم. جرّب صياغة ثانية.';bubble(m);say(m);return}
+    const d=await (await fetch(`${api}&prop=extracts&exintro=1&explaintext=1&titles=${encodeURIComponent(title)}`)).json();
+    const page=Object.values(d.query.pages)[0];
+    let text=(page.extract||'').trim();
+    if(text.length>1400){text=text.slice(0,1400);text=text.slice(0,Math.max(text.lastIndexOf('.'),text.lastIndexOf('؟'))+1)||text}
+    if(!text){const m='القصة موجودة بس بدون نص كافي.';bubble(m);say(m);return}
+    bubble(`${title}\n\n${text}\n\n(المصدر: ويكيبيديا العربية)`);
+    sayLong(`${title}. ${text}`);
+  }catch(e){
+    const m='تعذّر جلب القصة. تأكد من الإنترنت، وإن كنت تفتح الصفحة داخل معاينة Claude جرّب الرابط بعد رفعه على GitHub أو Vercel.\n(السبب: '+(e&&e.message?e.message:e)+')';
+    bubble(m);say('تعذّر جلب القصة.');
+  }
+}
+function handle(raw){
+  const t=raw.trim();if(!t)return;
+  bubble(t,true);
+  if(STORY.test(t)){story(t);return}
+  const type=classify(t);
+  items.unshift({id:Date.now(),type,text:t,done:false,at:Date.now()});
+  save();
+  const r=persona();
+  const reply=type==='idea'?r.idea:type==='mood'?r.mood:r.ok;
+  bubble(reply);say(reply);render();
+}
+
+function ago(ts){
+  const m=Math.round((Date.now()-ts)/60000);
+  if(m<1)return 'الآن';if(m<60)return `قبل ${m} دقيقة`;
+  const h=Math.round(m/60);if(h<24)return `قبل ${h} ساعة`;
+  return `قبل ${Math.round(h/24)} يوم`;
+}
+function render(){
+  const L=$('#list');L.innerHTML='';
+  if(!items.length){L.innerHTML='<p class="empty">ما في شي هنا بعد.<br>اضغط المايك وقل لغريم أول شي.</p>'}
+  items.forEach(it=>{
+    const d=document.createElement('div');d.className='item'+(it.done?' done':'');
+    const cb=document.createElement('input');cb.type='checkbox';cb.checked=it.done;cb.setAttribute('aria-label','تم');
+    cb.onchange=()=>{it.done=cb.checked;save();render()};
+    const p=document.createElement('p');p.textContent=it.text;
+    const tm=document.createElement('time');tm.textContent=ago(it.at);p.appendChild(tm);
+    const g=document.createElement('span');g.className='tag '+cls[it.type];g.textContent=label[it.type];
+    d.append(cb,p,g);L.appendChild(d);
+  });
+  $('#s1').textContent=items.filter(i=>i.type==='task').length;
+  $('#s2').textContent=items.filter(i=>i.type==='idea').length;
+  $('#s3').textContent=items.filter(i=>i.type==='mood').length;
+}
+
+$('#mbtn').onclick=()=>{
+  const day=items.filter(i=>Date.now()-i.at<864e5);
+  const tasks=day.filter(i=>i.type==='task'),done=tasks.filter(i=>i.done).length;
+  const ideas=day.filter(i=>i.type==='idea').length,moods=day.filter(i=>i.type==='mood');
+  let s=day.length?`اليوم سجلت ${day.length} أشياء. ${tasks.length} مهام أنجزت منها ${done}، وبقي ${tasks.length-done}. و${ideas} أفكار.`:'ما سجلت شي اليوم. بكرة نبدأ من جديد.';
+  if(moods.length)s+=` وذكرت شعورًا: "${moods[0].text.slice(0,40)}". بسأل عنه لاحقًا.`;
+  if(tasks.length-done>0)s+=' أجّلت بعض المهام، فكر ماذا تتركه منها.';
+  $('#mtext').textContent=s;say(s);
+};
+$('#rbtn').onclick=()=>{
+  const week=7*864e5;
+  const before=items.length;
+  items=items.filter(i=>!(i.done||(i.type==='note'&&Date.now()-i.at>week)));
+  save();render();
+  const n=before-items.length;
+  const s=n?`حصدت ${n} من الأشياء التي لا تفيدك. بقي لك ${items.length} مهمّ.`:'ما في شي يستاهل الحصاد الآن.';
+  $('#rtext').textContent=s;say(s);
+};
+
+// Voice
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec=null;
+$('#mic').onclick=()=>{
+  if('speechSynthesis' in window&&speechSynthesis.speaking){speechSynthesis.cancel();return}
+  if(!SR){bubble('متصفحك لا يدعم الصوت. اكتب رسالتك أو جرّب Chrome.');return}
+  if(rec){rec.stop();return}
+  rec=new SR();rec.lang=$('#dialect').value;rec.interimResults=false;
+  $('#mic').classList.add('rec');
+  rec.onresult=e=>handle(e.results[0][0].transcript);
+  rec.onerror=()=>bubble('ما سمعتك. تأكد من إذن المايك وحاول مرة ثانية.');
+  rec.onend=()=>{rec=null;$('#mic').classList.remove('rec')};
+  rec.start();
+};
+$('#send').onclick=()=>{handle($('#txt').value);$('#txt').value=''};
+$('#txt').addEventListener('keydown',e=>{if(e.key==='Enter'){$('#send').click()}});
+
+// Tabs
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x===b));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));
+  $('#bar').style.display=b.dataset.v==='talk'?'flex':'none';
+});
+
+// Start: greeting + follow-up on an old feeling
+bubble(persona().hi);
+const old=items.find(i=>i.type==='mood'&&Date.now()-i.at>864e5);
+if(old)bubble(`تذكرت إنك قلت: "${old.text.slice(0,50)}". وش صار معك؟`);
+$('#persona').onchange=()=>{const h=persona().hi;bubble(h);say(h)};
+render();
+</script>
+</body>
+</html>
